@@ -1,0 +1,988 @@
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rascunho de Relatório - Medidores de Velocidade</title>
+
+<style>
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        background: #ddd;
+    }
+
+    body {
+        font-family: "Times New Roman", Times, serif;
+        font-size: 11px;
+        color: #000;
+    }
+
+    .folha {
+        width: 210mm;
+        height: 297mm;
+        margin: 10px auto;
+        padding: 9mm 13mm 8mm;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    /* ============================================================
+       RADIO BUTTONS
+       ============================================================ */
+
+    .servico input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+
+        width: 3.5mm;
+        height: 3.5mm;
+
+        border: 0.25mm solid #000;
+        border-radius: 50%;
+
+        margin: 1mm 1mm 0 0;
+        padding: 0;
+
+        vertical-align: -0.7mm;
+
+        background: #fff;
+
+        position: relative;
+
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .servico input[type="radio"]:checked {
+        box-shadow: inset 0 0 0 0.9mm #ff0000;
+
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* ============================================================
+       CABEÇALHO
+       ============================================================ */
+
+    .cabecalho {
+        height: 29mm;
+        position: relative;
+    }
+
+    .logo {
+        position: absolute;
+        left: 5mm;
+        top: -1mm;
+        width: 22mm;
+    }
+
+    .logo-inmetro img {
+        max-width: 22mm;
+        max-height: 20mm;
+        display: block;
+        margin: 2.55mm auto;
+    }
+
+    .dados-cabecalho {
+        position: absolute;
+        left: 29mm;
+        top: 0;
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    .titulo {
+        text-align: center;
+        font-size: 11.5px;
+        font-weight: bold;
+        margin-bottom: 1mm;
+    }
+
+    /* ============================================================
+       TABELAS
+       ============================================================ */
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    td,
+    th {
+        border: 0.25mm solid #111;
+        padding: 1mm 1.2mm;
+        font-size: 11px;
+        line-height: 1.05;
+        vertical-align: middle;
+    }
+
+    .info td {
+        height: 6.25mm;
+    }
+
+    .servico td {
+        height: 7mm;
+    }
+
+    /* ============================================================
+       CAMPOS EDITÁVEIS
+       ============================================================ */
+
+    .editavel {
+        border: none;
+        outline: none;
+        background: transparent;
+        color: red;
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .editavel::placeholder {
+        color: #cc0000;
+        opacity: 0.7;
+    }
+
+    .editavel:focus {
+        background: #fff0f0;
+        box-shadow: inset 0 -0.3mm red;
+    }
+
+    .razao {
+        width: 65mm;
+    }
+
+    .endereco {
+        width: 150mm;
+    }
+
+    .sentido {
+        width: 150mm;
+    }
+
+    .ponto {
+        width: 100mm;
+    }
+
+    .faixa {
+        width: 4mm;
+        text-align: left;
+    }
+
+    .velocidade-nominal {
+        width: 3mm;
+        text-align: left;
+    }
+
+    .cdf {
+        width: 8mm;
+        text-align: left;
+    }
+
+    /* ============================================================
+       ENSAIO
+       ============================================================ */
+
+    .ensaio {
+        margin-top: 4.5mm;
+    }
+
+    .ensaio-titulo {
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 1mm;
+    }
+
+    .ensaio th {
+        height: 6.5mm;
+        text-align: center;
+    }
+
+    .ensaio td {
+        height: 6.15mm;
+    }
+
+    /* ============================================================
+       PARTE INFERIOR
+       ============================================================ */
+
+    .inferior {
+        margin-top: 4mm;
+    }
+
+    .inferior td {
+        height: 9mm;
+        vertical-align: top;
+        padding-top: 1.5mm;
+    }
+
+    .pessoas td {
+        height: 6.5mm;
+    }
+
+    .aprovacao {
+        margin-top: 7mm;
+        display: flex;
+        justify-content: space-around;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .linha {
+        display: inline-block;
+        width: 7mm;
+        border-bottom: 0.25mm solid #000;
+        height: 3mm;
+    }
+
+    .observacoes {
+        margin-top: 4mm;
+        height: 22mm;
+        border: 0.25mm solid #111;
+        padding: 1.2mm;
+        font-size: 11px;
+    }
+
+    /* ============================================================
+       BOTÃO
+       ============================================================ */
+
+    .botoes {
+        text-align: center;
+        margin-top: 5mm;
+    }
+
+    .botoes button {
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .botoes button:hover {
+        background: #555;
+    }
+
+    /* ============================================================
+       CAMPO COM ERRO
+       ============================================================ */
+
+    .campo-incompleto {
+        background: #ffe0e0 !important;
+        box-shadow: inset 0 -0.5mm red !important;
+    }
+
+    /* ============================================================
+       IMPRESSÃO
+       ============================================================ */
+
+    @media print {
+
+        html,
+        body {
+            background: #fff;
+        }
+
+        .folha {
+            margin: 0;
+            box-shadow: none;
+        }
+
+        .editavel:focus {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .botoes {
+            display: none;
+        }
+
+        .servico input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: 3.5mm;
+            height: 3.5mm;
+
+            border: 0.35mm solid #000;
+            border-radius: 50%;
+
+            background: #fff;
+
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .servico input[type="radio"]:checked {
+            background: #000;
+            box-shadow: inset 0 0 0 0.8mm #fff;
+
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
+
+</head> <body>
+
+<div class="folha">
+
+    <!-- ========================================================
+         CABEÇALHO
+         ======================================================== -->
+
+    <div class="cabecalho">
+
+        <div class="logo">
+            <div class="logo-inmetro">
+                <img src="inmetro.png" alt="Logo do INMETRO">
+            </div>
+        </div>
+
+        <div class="dados-cabecalho">
+            <div>SUR-GO DF</div>
+            <div>INSTITUTO NACIONAL DE METROLOGIA, QUALIDADE E TECNOLOGIA</div>
+            <div>
+                End.: CENTRO EMPRESARIAL PARQUE BRASÍLIA SIG QD. 1,
+                BL. A, LT. 955, CEP: 70610-410
+            </div>
+            <div>BRASÍLIA-DF</div>
+            <div>TELEFONE: (61) 3348-6300 / 3348-6320</div>
+        </div>
+
+    </div>
+
+    <div class="titulo">
+        RASCUNHO DE RELATÓRIO MEDIDORES DE VELOCIDADE PARA VEÍCULOS AUTOMOTIVOS
+    </div>
+
+    <!-- ========================================================
+         DADOS
+         ======================================================== -->
+
+    <table class="info">
+
+        <tr>
+            <td colspan="3">
+                Razão Social: TALENTECH TECNOLOGIA LTDA
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                Tipo de serviço metrológico:
+            </td>
+        </tr>
+
+    </table>
+
+    <!-- ========================================================
+         TIPO DE SERVIÇO
+         ======================================================== -->
+
+    <table class="servico">
+
+        <tr>
+
+            <td>
+                <label>
+                    <input type="radio" name="tipoServico" value="inicial">
+                    Verificação Inicial
+                </label>
+
+                <br>
+
+                <label>
+                    <input type="radio" name="tipoServico" value="periodica">
+                    Verificação Periódica
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <input type="radio" name="tipoServico" value="reparo">
+                    Verificação Após reparo
+                </label>
+
+                <br>
+
+                <label>
+                    <input type="radio" name="tipoServico" value="inspecao">
+                    Inspeção Metrológica
+                </label>
+            </td>
+
+        </tr>
+
+    </table>
+
+    <!-- ========================================================
+         LOCAL DO SERVIÇO
+         ======================================================== -->
+
+    <table class="info">
+
+        <tr>
+            <td colspan="3">
+                Local de execução do serviço metrológico
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                Endereço:
+                <input
+                    class="editavel endereco"
+                    type="text"
+                    placeholder="DIGITE O ENDEREÇO">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                Sentido:
+                <input
+                    class="editavel sentido"
+                    type="text"
+                    placeholder="DIGITE O SENTIDO">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                Identificação do Ponto:
+                <input
+                    class="editavel ponto"
+                    type="text"
+                    placeholder="DIGITE A IDENTIFICAÇÃO DO PONTO">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                N.º portaria de aprovação: 228/2018
+            </td>
+        </tr>
+
+        <tr>
+
+            <td>
+                Marca: ENGEBRAS
+            </td>
+
+            <td>
+                Modelo: MMV 544
+            </td>
+
+            <td>
+                N.º série:
+            </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                Nº Lacre:
+            </td>
+        </tr>
+
+        <tr>
+
+            <td>
+                Nº INMETRO:
+            </td>
+
+            <td>
+                Velocidade Nominal (km):
+                 <input
+                    class="editavel velocidade-nominal"
+                    type="text"
+                    placeholder="00"
+                    maxlength="2">
+
+                Km/h
+            </td>
+
+            <td>
+                Faixa:
+                <input
+                    class="editavel faixa"
+                    type="text"
+                    placeholder="00"
+                    maxlength="2">
+
+                CDF/
+
+                <input
+                    class="editavel cdf"
+                    type="text"
+                    placeholder="000"
+                    maxlength="3">
+            </td>
+
+        </tr>
+
+    </table>
+
+
+<table class="servico">       
+     <tr>
+
+            <td>
+                <b>Modelo conforme caderno de componentes</b>
+                </td>
+                <td>
+                <span>
+                    (___) SIM&nbsp;&nbsp;
+                    (___) NÃO&nbsp;&nbsp;
+                    (___) Não aplicável
+                </span>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                <b>Modelo conforme portaria de aprovação e aditivos</b>
+                </td>
+                <td>
+                <span>
+                    (___) SIM&nbsp;&nbsp;
+                    (___) NÃO
+                </span>
+
+            </td>
+
+        </tr>
+    </table>
+
+
+    <!-- ========================================================
+         ENSAIO DE CAMPO
+         ======================================================== -->
+
+    <div class="ensaio">
+
+        <div class="ensaio-titulo">
+            Ensaio de campo
+        </div>
+
+        <table>
+
+            <tr>
+
+                <th style="width: 25%;">
+                    Medições
+                </th>
+
+                <th style="width: 25%;">
+                    Velocidade do Padrão (P)
+                </th>
+
+                <th style="width: 25%;">
+                    Velocidade Registrada (R)
+                </th>
+
+                <th style="width: 25%;">
+                    Velocidade Indicada (I)
+                </th>
+
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- ========================================================
+         HORÁRIOS
+         ======================================================== -->
+
+    <table class="inferior">
+
+        <tr>
+
+            <td style="width: 33.33%;">
+
+                HORA DE SAÍDA: ______:______
+
+                <br><br>
+
+                HORA DE CHEGADA: ______:______
+
+            </td>
+
+            <td style="width: 33.33%;">
+
+                DATA: ______/______/__________
+
+                <br><br>
+
+                INÍCIO: ______:______
+
+                <br><br>
+
+                TÉRMINO: ______:______
+
+            </td>
+
+            <td style="width: 33.34%;">
+
+                PLACA: ____________________
+
+                <br><br>
+
+                km SAÍDA: _________________
+
+                <br><br>
+
+                km CHEGADA: _____________
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <!-- ========================================================
+         PESSOAL
+         ======================================================== -->
+
+    <table class="pessoas">
+
+        <tr>
+
+            <td>
+                Metrologista:
+            </td>
+
+            <td>
+                Matrícula nº:
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Auxiliar:
+            </td>
+
+            <td>
+                Matrícula nº:
+            </td>
+
+        </tr>
+
+    </table>
+
+    <!-- ========================================================
+         APROVAÇÃO
+         ======================================================== -->
+
+    <div class="aprovacao">
+
+        <div>
+            (___) Aprovado
+        </div>
+
+        <div>
+            (___) Reprovado
+        </div>
+
+    </div>
+
+    <!-- ========================================================
+         OBSERVAÇÕES
+         ======================================================== -->
+
+    <div class="observacoes">
+        <b>Observações:</b>
+    </div>
+
+    <!-- ========================================================
+         BOTÃO
+         ======================================================== -->
+
+    <div class="botoes">
+
+        <button type="button" onclick="validarEImprimir()">
+            🖨️ IMPRIMIR / SALVAR PDF
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+
+<script>
+    // ============================================================
+    // CONVERTER CAMPOS EDITÁVEIS PARA CAIXA ALTA
+    // ============================================================
+
+    document.querySelectorAll('.editavel').forEach(campo => {
+
+        campo.addEventListener('input', function () {
+
+            this.value = this.value.toUpperCase();
+
+            // Remove o destaque de erro assim que o usuário preencher
+            this.classList.remove('campo-incompleto');
+
+        });
+
+    });
+
+    // ============================================================
+    // VALIDAR CAMPOS DE TEXTO
+    // ============================================================
+
+    function validarCamposTexto() {
+
+        const campos = [
+            {
+                elemento: document.querySelector('.endereco'),
+                nome: 'Endereço'
+            },
+            {
+                elemento: document.querySelector('.sentido'),
+                nome: 'Sentido'
+            },
+            {
+                elemento: document.querySelector('.ponto'),
+                nome: 'Identificação do Ponto'
+            },
+            {
+                elemento: document.querySelector('.velocidade-nominal'),
+                nome: 'Velocidade Nominal'
+            },
+            {
+                elemento: document.querySelector('.faixa'),
+                nome: 'Faixa'
+            },
+            {
+                elemento: document.querySelector('.cdf'),
+                nome: 'CDF'
+            }
+        ];
+
+        const camposVazios = [];
+
+        campos.forEach(campo => {
+
+            // Segurança caso algum campo não exista no HTML
+            if (!campo.elemento) {
+                return;
+            }
+
+            const valor = campo.elemento.value.trim();
+
+            if (valor === '') {
+
+                campo.elemento.classList.add('campo-incompleto');
+
+                camposVazios.push(campo);
+
+            } else {
+
+                campo.elemento.classList.remove('campo-incompleto');
+
+            }
+
+        });
+
+        return camposVazios;
+    }
+
+    // ============================================================
+    // VALIDAR TIPO DE SERVIÇO
+    // ============================================================
+
+    function validarTipoServico() {
+
+        const tipoServico = document.querySelector(
+            'input[name="tipoServico"]:checked'
+        );
+
+        return tipoServico !== null;
+    }
+
+    // ============================================================
+    // FUNÇÃO PRINCIPAL
+    // ============================================================
+
+    function validarEImprimir() {
+
+        // --------------------------------------------------------
+        // 1. VERIFICAR TIPO DE SERVIÇO
+        // --------------------------------------------------------
+
+        const tipoServicoValido = validarTipoServico();
+
+        // --------------------------------------------------------
+        // 2. VERIFICAR CAMPOS DE TEXTO
+        // --------------------------------------------------------
+
+        const camposVazios = validarCamposTexto();
+
+        // --------------------------------------------------------
+        // 3. SE HOUVER ERROS
+        // --------------------------------------------------------
+
+        if (!tipoServicoValido || camposVazios.length > 0) {
+
+            let mensagem = 'ATENÇÃO!\n\n';
+
+            // Tipo de serviço não selecionado
+            if (!tipoServicoValido) {
+
+                mensagem +=
+                    '• Selecione o tipo de serviço metrológico.\n';
+
+            }
+
+            // Campos de texto vazios
+            if (camposVazios.length > 0) {
+
+                mensagem +=
+                    '\nCampos que precisam ser preenchidos:\n';
+
+                camposVazios.forEach(campo => {
+
+                    mensagem +=
+                        '• ' + campo.nome + '\n';
+
+                });
+
+            }
+
+            mensagem +=
+                '\nPreencha todas as informações obrigatórias antes de imprimir.';
+
+            alert(mensagem);
+
+            // ----------------------------------------------------
+            // COLOCAR FOCO NO PRIMEIRO ERRO
+            // ----------------------------------------------------
+
+            if (!tipoServicoValido) {
+
+                const primeiroRadio = document.querySelector(
+                    'input[name="tipoServico"]'
+                );
+
+                if (primeiroRadio) {
+                    primeiroRadio.focus();
+                }
+
+            } else if (camposVazios.length > 0) {
+
+                camposVazios[0].elemento.focus();
+
+            }
+
+            return;
+        }
+
+        // --------------------------------------------------------
+        // 4. TUDO PREENCHIDO
+        // --------------------------------------------------------
+
+        window.print();
+
+    }
+</script>
+
+</body> </html> 
