@@ -1,0 +1,1539 @@
+<!DOCTYPE html> <html lang="pt-BR"> <head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Relatório de Atendimento</title>
+
+<style>
+
+    /* =====================================================
+       CONFIGURAÇÃO GERAL
+       ===================================================== */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* =====================================================
+       CABEÇALHO
+       ===================================================== */
+
+    .cabecalho {
+        background: #075e54;
+        color: white;
+
+        padding: 25px;
+
+        border-radius: 15px 15px 0 0;
+
+        text-align: center;
+    }
+
+    .cabecalho h1 {
+        margin: 0 0 8px;
+        font-size: 26px;
+    }
+
+    .cabecalho p {
+        margin: 0;
+        opacity: 0.9;
+    }
+
+    /* =====================================================
+       CARD
+       ===================================================== */
+
+    .card {
+        background: white;
+
+        padding: 25px;
+
+        border-radius: 0 0 15px 15px;
+
+        box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* =====================================================
+       CAMPOS
+       ===================================================== */
+
+    .campo {
+        margin-bottom: 18px;
+    }
+
+    label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        font-weight: bold;
+
+        color: #334155;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+
+        width: 100%;
+
+        padding: 12px;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 8px;
+
+        font-size: 16px;
+
+        outline: none;
+
+        transition: 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+
+        border-color: #075e54;
+
+        box-shadow:
+            0 0 0 3px rgba(7, 94, 84, 0.1);
+    }
+
+    textarea {
+        min-height: 70px;
+        resize: vertical;
+    }
+
+    /* =====================================================
+       LINHA
+       ===================================================== */
+
+    .linha {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 15px;
+    }
+
+    /* =====================================================
+       ÁREA DOS TÉCNICOS
+       ===================================================== */
+
+    .tecnicos {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 8px;
+
+        background: #f8fafc;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 10px;
+
+        padding: 12px;
+    }
+
+    /* =====================================================
+       CADA TÉCNICO
+       ===================================================== */
+
+    .tecnico {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        padding: 9px 10px;
+
+        margin: 0;
+
+        background: white;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        font-weight: normal;
+
+        transition: 0.2s;
+    }
+
+    .tecnico:hover {
+
+        background: #ecfdf5;
+
+        border-color: #25d366;
+    }
+
+    .tecnico input[type="checkbox"] {
+
+        width: 18px;
+
+        height: 18px;
+
+        margin: 0;
+
+        cursor: pointer;
+
+        accent-color: #075e54;
+    }
+
+    /* Técnico selecionado */
+
+    .tecnico.selecionado {
+
+        background: #dcfce7;
+
+        border-color: #25d366;
+    }
+
+    /* =====================================================
+       CAMPO OUTROS
+       ===================================================== */
+
+    .outros-input {
+
+        grid-column: 1 / -1;
+
+        display: none;
+    }
+
+    .outros-input.mostrar {
+
+        display: block;
+    }
+
+    /* =====================================================
+       BOTÕES
+       ===================================================== */
+
+    .botoes {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr 1fr;
+
+        gap: 10px;
+
+        margin-top: 25px;
+    }
+
+    button {
+
+        border: none;
+
+        border-radius: 9px;
+
+        padding: 14px;
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    button:hover {
+
+        transform:
+            translateY(-1px);
+
+        opacity: 0.92;
+    }
+
+    .btn-whatsapp {
+
+        background: #25d366;
+
+        color: white;
+    }
+
+    .btn-copiar {
+
+        background: #2563eb;
+
+        color: white;
+    }
+
+    .btn-limpar {
+
+        background: #64748b;
+
+        color: white;
+    }
+
+    /* =====================================================
+       PREVIEW
+       ===================================================== */
+
+    .preview {
+
+        margin-top: 25px;
+    }
+
+    .preview h2 {
+
+        font-size: 19px;
+
+        margin-bottom: 10px;
+    }
+
+    #mensagemPreview {
+
+        width: 100%;
+
+        min-height: 300px;
+
+        background: #f8fafc;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 10px;
+
+        padding: 15px;
+
+        white-space: pre-wrap;
+
+        font-family: Arial, sans-serif;
+
+        font-size: 15px;
+
+        line-height: 1.5;
+    }
+
+    /* =====================================================
+       AVISO
+       ===================================================== */
+
+    .aviso {
+
+        margin-top: 15px;
+
+        padding: 12px;
+
+        background: #ecfdf5;
+
+        border-left:
+            4px solid #25d366;
+
+        border-radius: 5px;
+
+        font-size: 14px;
+    }
+
+    /* =====================================================
+       RESPONSIVO
+       ===================================================== */
+
+    @media (max-width: 700px) {
+
+        body {
+            padding: 10px;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        .linha {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .botoes {
+            grid-template-columns: 1fr;
+        }
+
+        .tecnicos {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .cabecalho h1 {
+            font-size: 21px;
+        }
+    }
+
+    @media (max-width: 400px) {
+
+        .tecnicos {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
+
+</head> <body> <div class="container">
+
+<!-- =====================================================
+     CABEÇALHO
+     ===================================================== -->
+
+<div class="cabecalho">
+
+    <h1>
+        📋 RELATÓRIO DE ATENDIMENTO
+    </h1>
+
+    <p>
+        Preencha os dados e envie pelo WhatsApp
+    </p>
+
+</div>
+
+<div class="card">
+
+    <!-- =====================================================
+         DATA
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label for="data">
+            📅 Data
+        </label>
+
+        <input
+            type="date"
+            id="data">
+
+    </div>
+
+    <!-- =====================================================
+         ATENDIMENTO CDF
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            👷 Atendimento CDF
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="cdf">
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         ATENDIMENTO CN2
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            👷 Atendimento CN2
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="cn2">
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- =====================================================
+         AFERIÇÃO
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            👷 Aferição
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="afericao">
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label for="pontoServico">
+            🛣️ Ponto e Serviço
+        </label>
+
+        <input
+            type="text"
+            id="pontoServico"
+            placeholder="Digite a informação">
+
+    </div>
+
+    <hr>
+
+    <!-- =====================================================
+         ATUALIZAÇÃO DE CAIXA
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            📱 Atualização de Caixa
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="atualizacaoCaixa">
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label for="ponto">
+            🛣️ Ponto
+        </label>
+
+        <input
+            type="text"
+            id="ponto"
+            placeholder="Ex.: DER777">
+
+    </div>
+
+    <hr>
+
+    <!-- =====================================================
+         CAMINHÃO 01
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            🚛 Caminhão 01
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="caminhao1">
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label for="rodovia1">
+            🛣️ Rodovia, Ponto e Serviço
+        </label>
+
+        <input
+            type="text"
+            id="rodovia1"
+            placeholder="Ex.: IMPLANTAÇÃO DER777">
+
+    </div>
+
+    <hr>
+
+    <!-- =====================================================
+         CAMINHÃO 02
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            🚛 Caminhão 02
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="caminhao2">
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label for="rodovia2">
+            🛣️ Rodovia, Ponto e Serviço
+        </label>
+
+        <input
+            type="text"
+            id="rodovia2"
+            placeholder="Digite a informação">
+
+    </div>
+
+    <hr>
+
+    <!-- =====================================================
+         FIORINO
+         ===================================================== -->
+
+    <div class="campo">
+
+        <label>
+            🚐 Fiorino
+        </label>
+
+        <div
+            class="tecnicos"
+            data-grupo="fiorino">
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label for="rodovia3">
+            🛣️ Rodovia, Ponto e Serviço
+        </label>
+
+        <input
+            type="text"
+            id="rodovia3"
+            placeholder="Ex.: DF-001">
+
+    </div>
+
+    <!-- =====================================================
+         BOTÕES
+         ===================================================== -->
+
+    <div class="botoes">
+
+        <button
+            class="btn-whatsapp"
+            onclick="enviarWhatsApp()">
+
+            📱 ENVIAR WHATSAPP
+
+        </button>
+
+        <button
+            class="btn-copiar"
+            onclick="copiarMensagem()">
+
+            📋 COPIAR MENSAGEM
+
+        </button>
+
+        <button
+            class="btn-limpar"
+            onclick="limparFormulario()">
+
+            🗑️ LIMPAR
+
+        </button>
+
+    </div>
+
+    <!-- =====================================================
+         PREVIEW
+         ===================================================== -->
+
+    <div class="preview">
+
+        <h2>
+            👀 Visualização da mensagem
+        </h2>
+
+        <textarea
+            id="mensagemPreview"
+            readonly>
+        </textarea>
+
+        <div class="aviso">
+
+            <strong>
+                Como funciona:
+            </strong>
+
+            o botão do WhatsApp abre uma conversa
+            no WhatsApp com a mensagem já preenchida.
+
+            Você escolhe o contato ou grupo
+            e toca em enviar.
+
+        </div>
+
+    </div>
+
+</div>
+
+</div> <script>
+
+// =========================================================
+// LISTAS DE TÉCNICOS
+//
+// Aqui você controla quem aparece em cada atendimento.
+//
+// Para adicionar alguém:
+//
+// "Nome",
+//
+// Para remover alguém:
+//
+// apague o nome.
+// =========================================================
+
+const tecnicosPorGrupo = {
+
+    // -----------------------------------------------------
+    // CDF
+    // -----------------------------------------------------
+
+    cdf: [
+
+        "Tomé",
+        "Jovailson",
+        "Hérico",
+        "Abimael",
+        "Adeilson",
+        "Robson",
+        "Raimundo",
+        "Miguel",
+        "Tomé"
+
+    ],
+
+    // -----------------------------------------------------
+    // CN2
+    // -----------------------------------------------------
+
+    cn2: [
+
+        "Jovailson",
+        "Tomé",
+        "Adeilson"
+
+    ],
+
+    // -----------------------------------------------------
+    // AFERIÇÃO
+    // -----------------------------------------------------
+
+    afericao: [
+
+        "Raimundo",
+        "Miguel",
+        "Wanderson",
+        "Robson",
+        "Jovailson"
+
+    ],
+
+    // -----------------------------------------------------
+    // ATUALIZAÇÃO DE CAIXA
+    // -----------------------------------------------------
+
+    atualizacaoCaixa: [
+
+        "Robson",
+        "Alessandro",
+        "Wanderson"
+
+    ],
+
+    // -----------------------------------------------------
+    // CAMINHÃO 01
+    // -----------------------------------------------------
+
+    caminhao1: [
+
+        "Elder",
+        "Maciel",
+        "Willian",
+        "Braulio",
+        "Adeilson",
+        "Hérico",
+        "Jesser"
+
+    ],
+
+    // -----------------------------------------------------
+    // CAMINHÃO 02
+    // -----------------------------------------------------
+
+    caminhao2: [
+
+        "Elder",
+        "Maciel",
+        "Willian",
+        "Braulio",
+        "Adeilson",
+        "Hérico",
+        "Jesser"
+
+    ],
+
+    // -----------------------------------------------------
+    // FIORINO
+    // -----------------------------------------------------
+
+    fiorino: [
+
+        "André",
+        "Maciel"
+
+    ]
+
+};
+
+// =========================================================
+// CRIA OS CHECKBOXES
+//
+// Esta função percorre cada grupo:
+//
+// CDF
+// CN2
+// AFERIÇÃO
+// etc.
+//
+// Depois procura a lista correspondente.
+// =========================================================
+
+function criarCheckboxes() {
+
+    // Procura todos os elementos que possuem
+    // class="tecnicos"
+
+    const grupos =
+        document.querySelectorAll(".tecnicos");
+
+    // Percorre cada grupo
+
+    grupos.forEach(function(grupo) {
+
+        // Descobre o nome do grupo.
+
+        // Exemplo:
+        //
+        // data-grupo="cdf"
+        //
+        // retorna:
+        //
+        // "cdf"
+
+        const nomeGrupo =
+            grupo.dataset.grupo;
+
+        // Agora procura a lista correspondente.
+
+        // Se nomeGrupo for "cdf":
+        //
+        // tecnicosPorGrupo["cdf"]
+        //
+        // retorna a lista do CDF.
+
+        const listaTecnicos =
+            tecnicosPorGrupo[nomeGrupo];
+
+        // Percorre os técnicos daquele grupo.
+
+        listaTecnicos.forEach(function(nome) {
+
+            // -------------------------------------------------
+            // CRIA O LABEL
+            // -------------------------------------------------
+
+            const label =
+                document.createElement("label");
+
+            label.className =
+                "tecnico";
+
+            // -------------------------------------------------
+            // CRIA O CHECKBOX
+            // -------------------------------------------------
+
+            const checkbox =
+                document.createElement("input");
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.value =
+                nome;
+
+            // Guarda a qual grupo esse checkbox pertence.
+
+            checkbox.dataset.grupo =
+                nomeGrupo;
+
+            // -------------------------------------------------
+            // QUANDO O CHECKBOX FOR MARCADO
+            // -------------------------------------------------
+
+            checkbox.addEventListener(
+                "change",
+                function() {
+
+                    if (checkbox.checked) {
+
+                        label.classList.add(
+                            "selecionado"
+                        );
+
+                    } else {
+
+                        label.classList.remove(
+                            "selecionado"
+                        );
+
+                    }
+
+                    // Atualiza a mensagem.
+
+                    gerarMensagem();
+
+                }
+            );
+
+            // -------------------------------------------------
+            // COLOCA O NOME DO TÉCNICO
+            // -------------------------------------------------
+
+            const texto =
+                document.createTextNode(nome);
+
+            // Coloca o checkbox dentro do label.
+
+            label.appendChild(
+                checkbox
+            );
+
+            // Coloca o nome dentro do label.
+
+            label.appendChild(
+                texto
+            );
+
+            // Coloca o label dentro do grupo.
+
+            grupo.appendChild(
+                label
+            );
+
+        });
+
+        // -------------------------------------------------
+        // CRIA A OPÇÃO "OUTROS"
+        // -------------------------------------------------
+
+        const labelOutros =
+            document.createElement("label");
+
+        labelOutros.className =
+            "tecnico";
+
+        const checkboxOutros =
+            document.createElement("input");
+
+        checkboxOutros.type =
+            "checkbox";
+
+        checkboxOutros.value =
+            "Outros";
+
+        checkboxOutros.dataset.grupo =
+            nomeGrupo;
+
+        const textoOutros =
+            document.createTextNode(
+                "Outros"
+            );
+
+        labelOutros.appendChild(
+            checkboxOutros
+        );
+
+        labelOutros.appendChild(
+            textoOutros
+        );
+
+        grupo.appendChild(
+            labelOutros
+        );
+
+        // -------------------------------------------------
+        // CAMPO PARA DIGITAR "OUTROS"
+        // -------------------------------------------------
+
+        const campoOutros =
+            document.createElement("input");
+
+        campoOutros.type =
+            "text";
+
+        campoOutros.className =
+            "outros-input";
+
+        campoOutros.placeholder =
+            "Digite o nome de outro técnico";
+
+        campoOutros.dataset.grupo =
+            nomeGrupo;
+
+        grupo.appendChild(
+            campoOutros
+        );
+
+        // -------------------------------------------------
+        // QUANDO MARCAR "OUTROS"
+        // -------------------------------------------------
+
+        checkboxOutros.addEventListener(
+            "change",
+            function() {
+
+                if (checkboxOutros.checked) {
+
+                    labelOutros.classList.add(
+                        "selecionado"
+                    );
+
+                    campoOutros.classList.add(
+                        "mostrar"
+                    );
+
+                } else {
+
+                    labelOutros.classList.remove(
+                        "selecionado"
+                    );
+
+                    campoOutros.classList.remove(
+                        "mostrar"
+                    );
+
+                    campoOutros.value = "";
+
+                }
+
+                gerarMensagem();
+
+            }
+        );
+
+        // Atualiza a mensagem quando digitar
+        // no campo "Outros".
+
+        campoOutros.addEventListener(
+            "input",
+            function() {
+
+                gerarMensagem();
+
+            }
+        );
+
+    });
+
+}
+
+// =========================================================
+// PEGA OS TÉCNICOS SELECIONADOS
+// =========================================================
+
+function tecnicosSelecionados(grupo) {
+
+    // Procura os checkboxes marcados
+    // daquele grupo.
+
+    const checkboxes =
+        document.querySelectorAll(
+            `input[type="checkbox"][data-grupo="${grupo}"]:checked`
+        );
+
+    const nomes = [];
+
+    // Percorre os checkboxes marcados.
+
+    checkboxes.forEach(function(checkbox) {
+
+        // Se for "Outros", não colocamos
+        // literalmente a palavra "Outros".
+
+        if (checkbox.value === "Outros") {
+
+            const campoOutros =
+                document.querySelector(
+                    `.outros-input[data-grupo="${grupo}"]`
+                );
+
+            if (campoOutros &&
+                campoOutros.value.trim()) {
+
+                nomes.push(
+                    campoOutros.value.trim()
+                );
+
+            }
+
+        } else {
+
+            nomes.push(
+                checkbox.value
+            );
+
+        }
+
+    });
+
+    // Junta os nomes usando vírgula.
+
+    return nomes.join(", ");
+
+}
+
+// =========================================================
+// COLOCA A DATA ATUAL
+// =========================================================
+
+function colocarDataAtual() {
+
+    const hoje =
+        new Date();
+
+    const ano =
+        hoje.getFullYear();
+
+    const mes =
+        String(
+            hoje.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dia =
+        String(
+            hoje.getDate()
+        ).padStart(2, "0");
+
+    document.getElementById("data").value =
+        `${ano}-${mes}-${dia}`;
+
+}
+
+// =========================================================
+// NOME DO DIA DA SEMANA
+// =========================================================
+
+function nomeDiaSemana(data) {
+
+    const dias = [
+
+        "DOMINGO",
+        "SEGUNDA FEIRA",
+        "TERÇA FEIRA",
+        "QUARTA FEIRA",
+        "QUINTA FEIRA",
+        "SEXTA FEIRA",
+        "SÁBADO"
+
+    ];
+
+    const dataObj =
+        new Date(
+            data + "T00:00:00"
+        );
+
+    return dias[
+        dataObj.getDay()
+    ];
+
+}
+
+// =========================================================
+// FORMATA A DATA
+// =========================================================
+
+function formatarData(data) {
+
+    if (!data) {
+
+        return "";
+
+    }
+
+    const partes =
+        data.split("-");
+
+    const ano =
+        partes[0];
+
+    const mes =
+        partes[1];
+
+    const dia =
+        partes[2];
+
+    return `${dia}/${mes}/${ano}`;
+
+}
+
+// =========================================================
+// PEGA O VALOR DE UM CAMPO
+// =========================================================
+
+function valor(id) {
+
+    return document
+        .getElementById(id)
+        .value
+        .trim();
+
+}
+
+// =========================================================
+// MONTA A MENSAGEM
+// =========================================================
+
+function gerarMensagem() {
+
+    const data =
+        valor("data");
+
+    let mensagem = "";
+
+    // -----------------------------------------------------
+    // DATA
+    // -----------------------------------------------------
+
+    if (data) {
+
+        mensagem +=
+            "*" +
+            nomeDiaSemana(data) +
+            ", " +
+            formatarData(data) +
+            "*" +
+            "\n";
+
+    }
+
+    // -----------------------------------------------------
+    // CDF
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*ATENDIMENTO CDF:* " +
+        tecnicosSelecionados("cdf") +
+        "\n";
+
+    // -----------------------------------------------------
+    // CN2
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*ATENDIMENTO CN2:* " +
+        tecnicosSelecionados("cn2") +
+        "\n";
+
+    // -----------------------------------------------------
+    // AFERIÇÃO
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*AFERIÇÃO:* " +
+        tecnicosSelecionados("afericao") +
+        "\n";
+
+    // -----------------------------------------------------
+    // PONTO E SERVIÇO
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*PONTO E SERVIÇO:* " +
+        valor("pontoServico") +
+        "\n";
+
+    // -----------------------------------------------------
+    // ATUALIZAÇÃO DE CAIXA
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*ATUALIZAÇÃO DE CAIXA:* " +
+        tecnicosSelecionados(
+            "atualizacaoCaixa"
+        ) +
+        "\n";
+
+    // -----------------------------------------------------
+    // PONTO
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*PONTO:* " +
+        valor("ponto") +
+        "\n";
+
+    // -----------------------------------------------------
+    // CAMINHÃO 01
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*CAMINHÃO 01:* " +
+        tecnicosSelecionados(
+            "caminhao1"
+        ) +
+        "\n";
+
+    mensagem +=
+        "*RODOVIA, PONTO E SERVIÇO:* " +
+        valor("rodovia1") +
+        "\n";
+
+    // -----------------------------------------------------
+    // CAMINHÃO 02
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*CAMINHÃO 02:* " +
+        tecnicosSelecionados(
+            "caminhao2"
+        ) +
+        "\n";
+
+    mensagem +=
+        "*RODOVIA, PONTO E SERVIÇO:* " +
+        valor("rodovia2") +
+        "\n";
+
+    // -----------------------------------------------------
+    // FIORINO
+    // -----------------------------------------------------
+
+    mensagem +=
+        "*FIORINO:* " +
+        tecnicosSelecionados(
+            "fiorino"
+        ) +
+        "\n";
+
+    mensagem +=
+        "*RODOVIA, PONTO E SERVIÇO:* " +
+        valor("rodovia3");
+
+    // -----------------------------------------------------
+    // MOSTRA A MENSAGEM NA TELA
+    // -----------------------------------------------------
+
+    document.getElementById(
+        "mensagemPreview"
+    ).value = mensagem;
+
+    return mensagem;
+
+}
+
+// =========================================================
+// ATUALIZA ENQUANTO DIGITA
+// =========================================================
+
+document.addEventListener(
+    "input",
+    function() {
+
+        gerarMensagem();
+
+    }
+);
+
+// =========================================================
+// ENVIA PARA O WHATSAPP
+// =========================================================
+
+function enviarWhatsApp() {
+
+    const mensagem =
+        gerarMensagem();
+
+    if (!mensagem.trim()) {
+
+        alert(
+            "Preencha os dados antes de enviar."
+        );
+
+        return;
+
+    }
+
+    const textoCodificado =
+        encodeURIComponent(
+            mensagem
+        );
+
+    const url =
+        "https://wa.me/?text=" +
+        textoCodificado;
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+// =========================================================
+// COPIAR MENSAGEM
+// =========================================================
+
+async function copiarMensagem() {
+
+    const mensagem =
+        gerarMensagem();
+
+    try {
+
+        await navigator
+            .clipboard
+            .writeText(
+                mensagem
+            );
+
+        alert(
+            "Mensagem copiada com sucesso!"
+        );
+
+    } catch (erro) {
+
+        alert(
+            "Não foi possível copiar automaticamente. " +
+            "Selecione a mensagem e copie manualmente."
+        );
+
+    }
+
+}
+
+// =========================================================
+// LIMPAR FORMULÁRIO
+// =========================================================
+
+function limparFormulario() {
+
+    const confirmar =
+        confirm(
+            "Deseja realmente limpar todos os campos?"
+        );
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+    // -----------------------------------------------------
+    // LIMPA INPUTS DE TEXTO E DATA
+    // -----------------------------------------------------
+
+    document
+        .querySelectorAll(
+            'input[type="text"], input[type="date"]'
+        )
+        .forEach(function(campo) {
+
+            campo.value = "";
+
+        });
+
+    // -----------------------------------------------------
+    // DESMARCA CHECKBOXES
+    // -----------------------------------------------------
+
+    document
+        .querySelectorAll(
+            'input[type="checkbox"]'
+        )
+        .forEach(function(checkbox) {
+
+            checkbox.checked =
+                false;
+
+            checkbox
+                .closest(".tecnico")
+                .classList
+                .remove(
+                    "selecionado"
+                );
+
+        });
+
+    // -----------------------------------------------------
+    // ESCONDE OS CAMPOS "OUTROS"
+    // -----------------------------------------------------
+
+    document
+        .querySelectorAll(
+            ".outros-input"
+        )
+        .forEach(function(campo) {
+
+            campo.classList.remove(
+                "mostrar"
+            );
+
+        });
+
+    // -----------------------------------------------------
+    // LIMPA PREVIEW
+    // -----------------------------------------------------
+
+    document.getElementById(
+        "mensagemPreview"
+    ).value = "";
+
+    // -----------------------------------------------------
+    // COLOCA DATA ATUAL NOVAMENTE
+    // -----------------------------------------------------
+
+    colocarDataAtual();
+
+    // -----------------------------------------------------
+    // ATUALIZA MENSAGEM
+    // -----------------------------------------------------
+
+    gerarMensagem();
+
+}
+
+// =========================================================
+// INICIALIZAÇÃO
+// =========================================================
+
+criarCheckboxes();
+
+colocarDataAtual();
+
+gerarMensagem();
+
+</script> </body> </html>

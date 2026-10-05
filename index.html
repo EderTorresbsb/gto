@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>GTO | Sistema</title>
+
+
+    <style>
+
+        /* =====================================================
+           CONFIGURAÇÕES GERAIS
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #075e54
+                );
+
+            color: #ffffff;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+        }
+
+
+        /* =====================================================
+           CONTAINER PRINCIPAL
+           ===================================================== */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            text-align: center;
+
+        }
+
+
+        /* =====================================================
+           LOGO GTO
+           ===================================================== */
+
+        .logo {
+
+            width: 130px;
+
+            height: 130px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 30px;
+
+            background: #ffffff;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.25);
+
+        }
+
+
+        .logo span {
+
+            font-size: 42px;
+
+            font-weight: 900;
+
+            color: #075e54;
+
+            letter-spacing: -3px;
+
+        }
+
+
+        /* =====================================================
+           TÍTULO
+           ===================================================== */
+
+        h1 {
+
+            font-size: 38px;
+
+            margin-bottom: 8px;
+
+            font-weight: 800;
+
+        }
+
+
+        .subtitulo {
+
+            color: #d1fae5;
+
+            font-size: 16px;
+
+            margin-bottom: 40px;
+
+        }
+
+
+        /* =====================================================
+           MENU
+           ===================================================== */
+
+        .menu {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card {
+
+            background: rgba(
+                255,
+                255,
+                255,
+                0.97
+            );
+
+            color: #1e293b;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            display: block;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.15);
+
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+                0 18px 40px
+                rgba(0, 0, 0, 0.25);
+
+        }
+
+
+        /* =====================================================
+           ÍCONE DO CARD
+           ===================================================== */
+
+        .icone {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 18px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 34px;
+
+            background: #dcfce7;
+
+        }
+
+
+        /* =====================================================
+           TEXTO DO CARD
+           ===================================================== */
+
+        .card h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 8px;
+
+            color: #0f172a;
+
+        }
+
+
+        .card p {
+
+            font-size: 14px;
+
+            color: #64748b;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           RODAPÉ
+           ===================================================== */
+
+        footer {
+
+            margin-top: 35px;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVO
+           ===================================================== */
+
+        @media (max-width: 650px) {
+
+            body {
+
+                padding: 15px;
+
+            }
+
+
+            .logo {
+
+                width: 105px;
+
+                height: 105px;
+
+                border-radius: 25px;
+
+            }
+
+
+            .logo span {
+
+                font-size: 34px;
+
+            }
+
+
+            h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            .subtitulo {
+
+                margin-bottom: 30px;
+
+            }
+
+
+            .menu {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .card {
+
+                padding: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- =================================================
+             LOGO
+             ================================================= -->
+
+        <div class="logo">
+
+            <span>
+                GTO
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             TÍTULO
+             ================================================= -->
+
+        <p class="subtitulo">
+            Sistema de Controle e Atendimento
+        </p>
+
+
+        <!-- =================================================
+             MENU
+             ================================================= -->
+
+        <div class="menu">
+
+
+            <!-- PROGRAMÇÃO DO DIA -->
+
+            <a
+                href="programaçãoDia.html"
+                class="card">
+
+                <div class="icone">
+                    📅
+                </div>
+
+                <h2>
+                    Programação do Dia
+                </h2>
+
+                <p>
+                    Acesse a programação,
+                    organize as atividades
+                    e acompanhe os serviços
+                    do dia.
+                </p>
+
+            </a>
+
+
+            <!-- RASCUNHO WEB -->
+
+            <a
+                href="RascunhoWeb.html"
+                class="card">
+
+                <div class="icone">
+                    📋
+                </div>
+
+                <h2>
+                    Relatório de Atendimento
+                </h2>
+
+                <p>
+                    Preencha os atendimentos,
+                    selecione os técnicos
+                    e envie o relatório
+                    pelo WhatsApp.
+                </p>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- =================================================
+             RODAPÉ
+             ================================================= -->
+
+        <footer>
+
+            GTO © 2026 — Sistema interno
+
+        </footer>
+
+
+    </div>
+
+
+</body>
+
+</html>
